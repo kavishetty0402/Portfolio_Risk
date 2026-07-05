@@ -98,7 +98,7 @@ The dashboard produces:
 
 ```
 portfolio-risk-engine/
-├── app.py                 Main application (data, risk, FI engines + UI)
+├── FIandE.py                 Main application (data, risk, FI engines + UI)
 ├── requirements.txt       Python dependencies
 ├── README.md
 ├── LICENSE
