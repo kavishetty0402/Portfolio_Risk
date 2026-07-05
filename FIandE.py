@@ -474,8 +474,7 @@ class MultiAssetRiskEngine:
         Compute VaR for a bond portfolio using GARCH on yield changes.
         yield_history: Series of daily yield levels (e.g. 10Y Treasury).
         """
-       yh = yield_history.squeeze() if hasattr(yield_history, 'squeeze') else yield_history
-       yield_changes = yh.diff().dropna() / 100
+        yield_changes = yield_history.diff().dropna() / 100  # convert pct to decimal
 
         # Fit GARCH to yield changes
         series_scaled = yield_changes * 10000  # scale to bps for numerical stability
@@ -539,7 +538,6 @@ class MultiAssetRiskEngine:
             return None
 
         equity_returns = self.equity_re.returns
-        yh = yield_history.squeeze() if hasattr(yield_history, 'squeeze') else yield_history
         yield_changes = yh.reindex(equity_returns.index).diff().dropna() / 100
         common_idx = equity_returns.index.intersection(yield_changes.index)
         eq_aligned = equity_returns.loc[common_idx]
@@ -673,6 +671,8 @@ def fetch_yield_history(period="2y"):
     """Fetch 10Y Treasury yield history for bond risk modelling."""
     try:
         data = yf.download('^TNX', period=period, progress=False)['Close']
+        if isinstance(data, pd.DataFrame):
+            data = data.squeeze()
         if len(data) > 0:
             return data
     except:
