@@ -474,7 +474,8 @@ class MultiAssetRiskEngine:
         Compute VaR for a bond portfolio using GARCH on yield changes.
         yield_history: Series of daily yield levels (e.g. 10Y Treasury).
         """
-        yield_changes = yield_history.diff().dropna() / 100  # convert pct to decimal
+       yh = yield_history.squeeze() if hasattr(yield_history, 'squeeze') else yield_history
+       yield_changes = yh.diff().dropna() / 100
 
         # Fit GARCH to yield changes
         series_scaled = yield_changes * 10000  # scale to bps for numerical stability
@@ -538,7 +539,8 @@ class MultiAssetRiskEngine:
             return None
 
         equity_returns = self.equity_re.returns
-        yield_changes = yield_history.reindex(equity_returns.index).diff().dropna() / 100
+        yh = yield_history.squeeze() if hasattr(yield_history, 'squeeze') else yield_history
+        yield_changes = yh.reindex(equity_returns.index).diff().dropna() / 100
         common_idx = equity_returns.index.intersection(yield_changes.index)
         eq_aligned = equity_returns.loc[common_idx]
         yc_aligned = yield_changes.loc[common_idx]
