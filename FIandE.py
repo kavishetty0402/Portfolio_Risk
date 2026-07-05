@@ -538,7 +538,7 @@ class MultiAssetRiskEngine:
             return None
 
         equity_returns = self.equity_re.returns
-        yield_changes = yh.reindex(equity_returns.index).diff().dropna() / 100
+        yield_changes = yield_history.reindex(equity_returns.index).diff().dropna() / 100
         common_idx = equity_returns.index.intersection(yield_changes.index)
         eq_aligned = equity_returns.loc[common_idx]
         yc_aligned = yield_changes.loc[common_idx]
