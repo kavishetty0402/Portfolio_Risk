@@ -106,6 +106,7 @@ class RiskEngine:
             'conditional_volatility': result.conditional_volatility / 100
         }
 
+    np.random.seed(42)
     def compute_portfolio_var(self, weights, confidence=0.95, n_simulations=10000):
         if not self.garch_results:
             self.fit_all()
@@ -469,6 +470,7 @@ class MultiAssetRiskEngine:
         self.bond_engine = bond_engine
         self.bonds = bonds or []
 
+    np.random.seed(42)
     def compute_bond_portfolio_risk(self, yield_history, confidence=0.95, n_sims=10000):
         """
         Compute VaR for a bond portfolio using GARCH on yield changes.
@@ -531,6 +533,7 @@ class MultiAssetRiskEngine:
             'bond_details': bond_details
         }
 
+    np.random.seed(42)
     def compute_combined_var(self, equity_weights, equity_total_investment,
                              yield_history, confidence=0.95, n_sims=10000):
         """Compute combined VaR across equities and bonds with correlation."""
